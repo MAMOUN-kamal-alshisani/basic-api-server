@@ -1,4 +1,4 @@
-const foodModel = (Sequelize,DataType)=>Sequelize.define('food',{
+const foodModel = (sequelize,DataType)=>sequelize.define('food',{
 foodName:{
 
 type:DataType.STRING,

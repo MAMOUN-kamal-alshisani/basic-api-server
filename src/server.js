@@ -9,10 +9,10 @@ const errorHandler =require('./error-handlers/500');
 const loggerMeddleware =require('./middleware/logger');
 const validator =require('./middleware/validator');
 const foodRoute=require('./routes/food');
-// const clothesRoute=require('./routes/clothes');
+const clothesRoute=require('./routes/clothes');
 
 app.use(foodRoute);
-// app.use(clothesRoute);
+app.use(clothesRoute);
 app.use(loggerMeddleware);
 app.use(validator);
 

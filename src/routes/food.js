@@ -1,46 +1,61 @@
-'use strict';
+"use strict";
 
-const express=require('express');
+const express = require('express');
 const router=express.Router();
- 
-const {food}=require('../models/index')
 
+
+const { food }=require('../models/index');
+
+router.get('/food', getAllFood);
+router.get('/food/:id', getFood);
+router.post('/food', createFood);
+router.put('/food/:id', updateFood);
+router.delete('/food/:id', deleteFood);
 
 
 router.get('/', (req, res)=>{
-    res.send('hello world');
+    res.send('hello');
 });
 
+// router.get('/bad', (req, res)=>{
+//     let number = 12;
+//     number.forEach(x=> console.log(x));
+//     res.send('this Bad Route');
 
-router.get('/food',getFoodQuery);
-// router.get('/food:name',getFoodParam);
-// router.post('/food',createNewFood)
-// router.post('/food',createNewFood)
-
-
-
-
-function getFoodQuery(req,res){
-
-    res.send(`hey this is from query, ${req.query.name}`)
-
-}
+// });
 
 
 
-router.get('/person',(req,res)=>{
+async function getFood(req,res){
+const id =parseInt(req.params.id);
+    let partialFood= await food.findOne({where: {id:id}}) 
+    res.status(200).json(partialFood)
+};
 
-    res.send(`hey this is from query, ${req.query.name}, ${req.query.age}`)
-    
-    })
-    
-    
-    
-    router.get('/person/:name',(req,res)=>{
-    
-        res.send(`hey this is from the params, ${req.params.name}`)
-        
-        })
+async function getAllFood(req, res) {
+    let Allfood = await food.findAll();
+    res.status(200).json(Allfood);
+};
 
+async function createFood(req, res) {
+    let newFood = req.body;
+    // console.log(newFood);
+    let foods = await food.create(newFood);
+    res.status(201).json(foods);
+};
 
-        module.exports=router;
+async function updateFood(req, res) {
+    let id = parseInt(req.params.id);
+    let reqBody = req.body;
+    let found = await food.findOne({ where: {id: id} });
+    let updatedFood = await found.update(reqBody);
+    res.status(200).json(updatedFood);
+};
+
+async function deleteFood(req,res) {
+    let id = parseInt(req.params.id);
+    let deletedFood= await food.destroy({where: {id: id}});
+    res.status(204).json(deletedFood);
+};
+
+module.exports = router;
